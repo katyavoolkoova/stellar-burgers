@@ -1,17 +1,56 @@
 import { FC, SyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
+import { loginUser } from '../../services/slices/authSlice';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { LoginUI } from '@ui-pages';
 
 export const Login: FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { error, loading } = useSelector((state) => state.auth);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [localError, setLocalError] = useState('');
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    setLocalError('');
+
+    if (!email || !password) {
+      setLocalError('Пожалуйста, заполните все поля');
+      return;
+    }
+
+    if (!email.includes('@')) {
+      setLocalError('Введите корректный email');
+      return;
+    }
+
+    dispatch(loginUser({ email, password }))
+      .unwrap()
+      .then(() => {
+        const from = location.state?.from || '/';
+        navigate(from);
+      })
+      .catch((error) => {
+        if (
+          error.message?.includes('401') ||
+          error.message?.includes('email')
+        ) {
+          setLocalError('Неверный email или пароль');
+        } else {
+          setLocalError('Ошибка при входе. Попробуйте позже.');
+        }
+      });
   };
+
+  const errorText = localError || error || '';
 
   return (
     <LoginUI
-      errorText=''
+      errorText={errorText}
       email={email}
       setEmail={setEmail}
       password={password}
