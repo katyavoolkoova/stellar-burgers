@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 import {
   CurrencyIcon,
   FormattedDate
@@ -11,6 +11,9 @@ import { OrderStatus } from '@components';
 
 export const OrderInfoUI: FC<OrderInfoUIProps> = memo(({ orderInfo }) => (
   <div className={styles.wrap}>
+    <h3 className={`${styles.header} text text_type_digits-medium mt-2 mb-4`}>
+      #{orderInfo.number && orderInfo.number.toString().padStart(6, '0')}
+    </h3>
     <h3 className={`text text_type_main-medium  pb-3 pt-10 ${styles.header}`}>
       {orderInfo.name}
     </h3>

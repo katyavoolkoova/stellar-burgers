@@ -22,15 +22,10 @@ export const createOrder = createAsyncThunk(
   async (ingredients: string[], { getState }) => {
     const state = getState() as RootState;
 
-    const { bun, ingredients: constructorIngredients } =
-      state.burgerConstructor;
+    const { bun } = state.burgerConstructor;
 
     if (!bun) {
       throw new Error('Выберите булку для заказа');
-    }
-
-    if (constructorIngredients.length === 0) {
-      throw new Error('Добавьте начинку для заказа');
     }
 
     const data = await orderBurgerApi(ingredients);
