@@ -2,9 +2,10 @@ import ingredientsReducer, { fetchIngredients } from './ingredientsSlice';
 import { TIngredient } from '../types';
 import { initialState } from './ingredientsSlice';
 
+
 describe('ingredients reducer', () => {
   test('should return initial state', () => {
-    expect(ingredientsReducer(undefined, { type: 'unknown' })).toEqual(
+    expect(ingredientsReducer(undefined, { type: 'UNKNOWN_ACTION' })).toEqual(
       initialState
     );
   });
